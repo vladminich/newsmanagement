@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<bean
+		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:db.properties</value>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+	<context:component-scan base-package="resources" />
+
+	<!-- Service layer -->
+
+	<bean id="NewsValueObjectServiceImpl"
+		class="com.epam.newscommon.service.implementation.NewsValueObjectServiceImpl">
+		<property name="authorService" ref="AuthorServiceImpl" />
+		<property name="newsService" ref="NewsServiceImpl" />
+		<property name="commentService" ref="CommentServiceImpl" />
+		<property name="tagService" ref="TagServiceImpl" />
+	</bean>
+	<bean id="AuthorServiceImpl" class="com.epam.newscommon.service.implementation.AuthorServiceImpl">
+		<property name="authorDAO" ref="AuthorDAOImpl" />
+	</bean>
+	<bean id="NewsServiceImpl" class="com.epam.newscommon.service.implementation.NewsServiceImpl">
+		<property name="newsDAO" ref="NewsDAOImpl" />
+	</bean>
+	<bean id="CommentServiceImpl" class="com.epam.newscommon.service.implementation.CommentServiceImpl">
+		<property name="commentDAO" ref="CommentDAOImpl" />
+	</bean>
+	<bean id="TagServiceImpl" class="com.epam.newscommon.service.implementation.TagServiceImpl">
+		<property name="tagDAO" ref="TagDAOImpl" />
+	</bean>
+
+	<!-- DAO layer -->
+
+	<bean id="AuthorDAOImpl" class="com.epam.newscommon.dao.implementation.AuthorDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="NewsDAOImpl" class="com.epam.newscommon.dao.implementation.NewsDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="CommentDAOImpl" class="com.epam.newscommon.dao.implementation.CommentDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="TagDAOImpl" class="com.epam.newscommon.dao.implementation.TagDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- DataSource and TransactionManager -->
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${db.driverClassName}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		<property name="initialSize" value="${db.initialSize}"></property>
+	</bean>
+</beans>
