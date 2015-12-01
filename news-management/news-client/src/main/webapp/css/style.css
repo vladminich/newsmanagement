@@ -19,14 +19,18 @@ html, body {
 }
 #newsComments {
 	position:relative;
-	margin-right: 10px;
-	white-space: pre-line;
-	display: inline;
+	float:left;	
+	margin-left: 3%;
 	color: red;
 }
-
+#newsShowMore{
+	float:left;	
+	margin-left: 3%;
+	
+}
 #newsTags {
-	margin-left: 40px;
+	float:left;
+	margin-left: 3%;
 	color: grey;
 	white-space: pre-line;
 	display: inline;
@@ -38,9 +42,13 @@ html, body {
 	font-weight: bold;
 	white-space: pre-wrap;
 	display: inline;
+	font-family: sans-serif;
+	font-size: 24;
 }
 
 #newsAuthor {
+	font-family: sans-serif;
+	font-style:italic;
 	white-space: pre-wrap;
 	display: inline;
 }
@@ -81,6 +89,7 @@ html, body {
 	height:100px;
 	float: left;
 	margin-left: 45px;
+	font-size: large;
 }
 #addComment{
 	float:right;
@@ -88,7 +97,7 @@ html, body {
 }
 #paganition{
 	position:inherit;	
-	padding-top: 10%;
+	padding-top: 6%;
 	color:black;
 	
 }
@@ -139,4 +148,16 @@ html, body {
 #previous{
 	position: absolute; 
 	padding-left: 4%;
+	
+}
+.error{
+	border:2px solid #c00;
+		
+}
+.msg{
+	float: left;
+	margin-left: 45px;
+	font-size:small;
+	font-color:red;
+	font-style: oblique;
 }

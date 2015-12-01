@@ -74,12 +74,14 @@
 				<div id="newsAuthor"> ( by ${newsVO.author.authorName} )</div>
 				<div id="newsModificationDate">${newsVO.news.modificationDate}</div>
 				<br/>
+				<br/>
 				<div id="newsShortText">${newsVO.news.shortText}</div>
 				<c:if test="${not empty newsVO.tags }">
 					<c:forEach var="tag" items="${newsVO.tags}">
 						<div id="newsTags">#${tag.tagName}</div>
 					</c:forEach>
 				</c:if>
+				<br/>
 				<c:choose>
 					<c:when test="${not empty newsVO.comments }">
 						<div id="newsComments" >
@@ -90,9 +92,12 @@
 							<fmt:message key="newslist.comments" />(0)</div>
 					</c:otherwise>
 				</c:choose>
+				<div id="newsShowMore">
 				<a href="controller?command=view_news&news_id=${newsVO.news.newsId}&indexPreviousPage=${indexNewsPage}"><fmt:message
-						key="newslist.view" /></a>
+						key="newslist.view" /></a></div>
+				<br/>
 				<hr />
+				<br/>
 			</c:forEach>
 		</c:if>
 	</div>

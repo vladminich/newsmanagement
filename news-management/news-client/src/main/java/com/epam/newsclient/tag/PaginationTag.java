@@ -29,7 +29,7 @@ public class PaginationTag extends TagSupport {
 										+ i + "\">" + i + " </a>");
 					} else {
 						pageContext.getOut()
-								.write("<a style=\"font-size:25; text-decoration: none;\" href=\"controller?command=show_list_news&indexNewsPage="
+								.write("<a style=\"font-size:25;color:green; text-decoration: none;\" href=\"controller?command=show_list_news&indexNewsPage="
 										+ i + "\">" + i + " </a>");
 					}
 				}
@@ -44,7 +44,7 @@ public class PaginationTag extends TagSupport {
 										+ i + "\">" + i + " </a>");
 					} else {
 						pageContext.getOut()
-								.write("<a style=\"font-size:25; text-decoration: none;\" href=\"controller?command=show_list_news&indexNewsPage="
+								.write("<a style=\"font-size:25;color:green; text-decoration: none;\" href=\"controller?command=show_list_news&indexNewsPage="
 										+ i + "\">" + i + " </a>");
 					}
 				}
@@ -59,7 +59,7 @@ public class PaginationTag extends TagSupport {
 										+ i + "\">" + i + " </a>");
 					} else {
 						pageContext.getOut()
-								.write("<a style=\"font-size:25; text-decoration: none;\" href=\"controller?command=show_list_news&indexNewsPage="
+								.write("<a style=\"font-size:25;color:green; text-decoration: none;\" href=\"controller?command=show_list_news&indexNewsPage="
 										+ i + "\">" + i + " </a>");
 					}
 				}
@@ -78,7 +78,7 @@ public class PaginationTag extends TagSupport {
 										+ i + "\">" + i + " </a>");
 					} else {
 						pageContext.getOut()
-								.write("<a style=\"font-size:25; text-decoration: none;\" href=\"controller?command=show_list_news&indexNewsPage="
+								.write("<a style=\"font-size:25;color:green; text-decoration: none;\" href=\"controller?command=show_list_news&indexNewsPage="
 										+ i + "\">" + i + " </a>");
 					}
 				}

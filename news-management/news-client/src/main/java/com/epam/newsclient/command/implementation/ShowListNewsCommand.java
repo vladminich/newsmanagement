@@ -17,8 +17,6 @@ import com.epam.newscommon.entity.Tag;
 import com.epam.newscommon.exception.ServiceException;
 import com.epam.newscommon.service.NewsValueObjectService;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-
 public class ShowListNewsCommand implements ICommand {
 	@Autowired
 	private NewsValueObjectService service;
@@ -36,10 +34,11 @@ public class ShowListNewsCommand implements ICommand {
 	private static final String PAR_RESET_FILTER = "clear";	
 
 	public String execute(HttpServletRequest request) throws ServiceException {
+		
 		String authorSearch = (String) request.getSession().getAttribute(ATTR_SESSION_AUTHOR);
 		String[] tagsSearch = (String[]) request.getSession().getAttribute(ATTR_SESSION_TAGS);
 		int indexPageNews = Integer.valueOf(request.getParameter(INDEX_PAGE));
-		String resetFilter = request.getParameter(PAR_RESET_FILTER);
+		String resetFilter = null ;
 		List<NewsValueObject> news = new ArrayList<>();
 	
 		if ((tagsSearch != null || authorSearch != null) && resetFilter==null) {

@@ -20,5 +20,7 @@
 		class="com.epam.newsclient.command.implementation.ChangeLanguageCommand"></bean>
 	<bean id="ViewNewsCommand"
 		class="com.epam.newsclient.command.implementation.ViewNewsCommand"></bean>
+	<bean id="AddCommentCommand"
+		class="com.epam.newsclient.command.implementation.AddCommentCommand"></bean>
 
 </beans>

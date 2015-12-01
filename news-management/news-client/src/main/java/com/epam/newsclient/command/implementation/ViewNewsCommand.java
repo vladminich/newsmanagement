@@ -20,7 +20,7 @@ public class ViewNewsCommand implements ICommand {
 
 	@Override
 	public String execute(HttpServletRequest request) throws ServiceException {
-		int indexPreviousPage = 1;
+		int indexPreviousPage = 0;
 		try {
 			indexPreviousPage = Integer.parseInt(request.getParameter(INDEX_PREVIOUS_NEWS_PAGE));
 		} catch (NumberFormatException e) {
@@ -29,7 +29,7 @@ public class ViewNewsCommand implements ICommand {
 		Long newsId = Long.valueOf(request.getParameter(NEWS_ID));
 		NewsValueObject news = service.findNews(newsId);
 		request.setAttribute(NEWS, news);
-		request.setAttribute(INDEX_PREVIOUS_NEWS_PAGE, indexPreviousPage);
+		request.getSession().setAttribute(INDEX_PREVIOUS_NEWS_PAGE, indexPreviousPage);
 		return ConfigurationManager.getProperty(PATH_PAGE_SUCCES);
 	}
 
