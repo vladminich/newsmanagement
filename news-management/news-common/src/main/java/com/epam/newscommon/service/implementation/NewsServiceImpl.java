@@ -197,6 +197,29 @@ public class NewsServiceImpl implements NewsService {
 		}
 		return amount;
 	}
+
+	@Override
+	public Long findPreviousNews(News currentNews) throws ServiceException {
+		Long previousNewsId=0L;
+		try {
+			previousNewsId = newsDAO.findPreviousNews(currentNews);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+		return previousNewsId;
+	}
+
+	@Override
+	public Long findNextNews(News currentNews) throws ServiceException {
+		Long nextNewsId=0L;
+		try {
+			nextNewsId = newsDAO.findNextNews(currentNews);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+		return nextNewsId;
+	}
+	
 	/**
 	 * Set  newsDAO
 	 * 
@@ -205,6 +228,7 @@ public class NewsServiceImpl implements NewsService {
 	public void setNewsDAO(NewsDAO newsDAO) {
 		this.newsDAO = newsDAO;
 	}
+
 
 	
 

@@ -24,7 +24,7 @@
 	</div>
 	<div id="maincontent">
 		<div id="back">
-			<a  href="Controller/?command=show_list_news&indexNewsPage=${sessionScope.indexPreviousPage}">
+			<a  href="Controller/?command=show_list_news&indexNewsPage=${sessionScope.idPreviousNewsPage}">
 			<fmt:message key="news.back" />
 			</a>
 		</div>
@@ -87,12 +87,12 @@
 		<br/>
 		<br/>
 		<div id="previous">
-			<a href="Controller/?command=view_news&news_id=${newsVO.news.newsId+1}&indexNewsPage=${sessionScope.indexPreviousPage}">
+			<a href="Controller?command=view_news&news_id=${idPreviousNews}&indexNewsPage=${sessionScope.indexPreviousPage}">
 				<fmt:message key="news.previous" />
 			</a>
 		</div>
 		<div id="next">
-			<a href="controller?command=view_news&news_id=${newsVO.news.newsId+1}&indexNewsPage=${sessionScope.indexPreviousPage}">
+			<a href="Controller?command=view_news&news_id=${idNextNews}&indexNewsPage=${sessionScope.indexPreviousPage}">
 				<fmt:message key="news.next" />
 			</a>
 		</div>

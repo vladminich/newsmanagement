@@ -13,8 +13,9 @@ import com.epam.newscommon.entity.Tag;
 /**
  * Interface NewsValueObjectService. Classes which implements it work with new
  * object (it contain {@link com.epam.newscommon.entity.Author},
- * {@link com.epam.newscommon.entity.News}, list of {@link com.epam.newscommon.entity.Tag},
- * list of {@link com.epam.newscommon.entity.Comment}
+ * {@link com.epam.newscommon.entity.News}, list of
+ * {@link com.epam.newscommon.entity.Tag}, list of
+ * {@link com.epam.newscommon.entity.Comment}
  * 
  * @author Uladzislau_Minich
  *
@@ -88,7 +89,8 @@ public interface NewsValueObjectService {
 	 * @return list of news value objects
 	 * @throws ServiceException
 	 */
-	List<NewsValueObject> findBySearchCriteria(SearchCriteriaObject sc,int indexPageNews,int countNews) throws ServiceException;
+	List<NewsValueObject> findBySearchCriteria(SearchCriteriaObject sc, int indexPageNews, int countNews)
+			throws ServiceException;
 
 	/**
 	 * Find all tags
@@ -161,12 +163,15 @@ public interface NewsValueObjectService {
 	 * @throws ServiceException
 	 */
 	void expiredAuthor(Author author) throws ServiceException;
+
 	/**
 	 * Count news
+	 * 
 	 * @return amount of news
 	 * @throws ServiceException
 	 */
-	int countNews()throws ServiceException;
+	int countNews() throws ServiceException;
+
 	/**
 	 * Find all authors
 	 * 
@@ -174,4 +179,22 @@ public interface NewsValueObjectService {
 	 * @throws ServiceException
 	 */
 	List<Author> findAllAuthors() throws ServiceException;
+
+	/**
+	 * Find news on the list, which is before the current
+	 * 
+	 * @param currentNewsId
+	 * @return news's id
+	 * @throws ServiceException
+	 */
+	Long findPreviousNews(News currentNews) throws ServiceException;
+
+	/**
+	 * Find news on the list, which is following the current
+	 * 
+	 * @param currentNewsId
+	 * @return news's id
+	 * @throws ServiceException
+	 */
+	Long findNextNews(News currentNews) throws ServiceException;
 }

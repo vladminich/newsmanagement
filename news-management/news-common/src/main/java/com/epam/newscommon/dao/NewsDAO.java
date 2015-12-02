@@ -89,4 +89,20 @@ public interface NewsDAO extends BaseDAO<News> {
 	 * @throws DAOException
 	 */
 	int countNews() throws DAOException;
+	/**
+	 * Find news on the list, which is before the current
+	 * 
+	 * @param currentNewsId
+	 * @return news's id
+	 * @throws DAOException
+	 */
+	Long findPreviousNews(News currentNews) throws DAOException;
+	/**
+	 * Find news on the list, which is following the current
+	 * 
+	 * @param currentNewsId
+	 * @return news's id
+	 * @throws DAOException
+	 */
+	Long findNextNews(News currentNews) throws DAOException;
 }

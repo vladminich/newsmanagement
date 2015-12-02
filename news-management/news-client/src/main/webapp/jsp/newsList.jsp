@@ -24,7 +24,6 @@
 	  <%@include file="/jsp/elements/header.jspf"%>
 	<br/>
 	<div id="maincontent">
-	<br/>
 	<div align="center">
 		<form action="Controller" method = "GET">
     		<select  name = "author">
@@ -55,6 +54,7 @@
         			<option value = "${tag.tagId}">${tag.tagName}</option>
         		</c:forEach>
   		 	</select>
+  		 	<br/>
   		 	<input type=hidden name="command" value="show_list_news"/>
   		 	<input type="submit" value="find"/>
   		 	<input type="hidden" name="indexNewsPage" value="1"/>
@@ -93,7 +93,7 @@
 					</c:otherwise>
 				</c:choose>
 				<div id="newsShowMore">
-				<a href="controller?command=view_news&news_id=${newsVO.news.newsId}&indexPreviousPage=${indexNewsPage}"><fmt:message
+				<a href="controller?command=view_news&news_id=${newsVO.news.newsId}&indexPreviousPage=${sessionScope.idPreviousNewsPage}"><fmt:message
 						key="newslist.view" /></a></div>
 				<br/>
 				<hr />

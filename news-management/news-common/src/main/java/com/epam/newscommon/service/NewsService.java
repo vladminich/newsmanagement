@@ -91,4 +91,20 @@ public interface NewsService extends BaseService<News> {
 	 * @throws ServiceException
 	 */
 	int countNews() throws ServiceException;
+	/**
+	 * Find news on the list, which is before the current
+	 * 
+	 * @param currentNewsId
+	 * @return news's id
+	 * @throws ServiceException
+	 */
+	Long findPreviousNews(News currentNews) throws ServiceException;
+	/**
+	 * Find news on the list, which is following the current
+	 * 
+	 * @param currentNewsId
+	 * @return news's id
+	 * @throws ServiceException
+	 */
+	Long findNextNews(News currentNews) throws ServiceException;
 }

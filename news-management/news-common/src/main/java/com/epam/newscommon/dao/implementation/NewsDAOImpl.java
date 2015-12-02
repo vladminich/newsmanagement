@@ -35,17 +35,19 @@ public class NewsDAOImpl implements NewsDAO {
 	public static final String SQL_FIND_BY_ID = "Select * from news where news.news_id=?";
 	public static final String SQL_FIND_BY_TITLE = "Select * from news where news.title=?";
 	public static final String SQL_FIND_ALL_AUTHORS_NEWS = "Select * from news JOIN news_author ON(news_author.news_id=news.news_id) where news_author.author_id=?";
-	public static final String SQL_SHOW_ALL_NEWS = "Select *   from news order by  news.modification_date DESC";
+	public static final String SQL_SHOW_ALL_NEWS = "SELECT NEWS.NEWS_ID, NEWS.TITLE,NEWS.SHORT_TEXT,NEWS.FULL_TEXT, NEWS.CREATION_DATE, NEWS.MODIFICATION_DATE, COUNT (COMMENTS.COMMENT_ID) FROM NEWS JOIN COMMENTS ON (NEWS.NEWS_ID=COMMENTS.NEWS_ID) GROUP BY NEWS.NEWS_ID, NEWS.TITLE, NEWS.CREATION_DATE, NEWS.SHORT_TEXT, NEWS.MODIFICATION_DATE, NEWS.FULL_TEXT ORDER BY NEWS.MODIFICATION_DATE DESC, COUNT (COMMENTS.COMMENT_ID)";
 	public static final String SQL_UPDATE = "Update news SET title=?,short_text=?,full_text=?,creation_date=?,modification_date=? where news_id=?";
 	public static final String SQL_DELETE = "Delete from news where news.news_id=?";
 	public static final String SQL_DELETE_NEWS_AUTHORS = "DELETE FROM news_author where news_id=?";
 	public static final String SQl_DELETE_NEWS_TAG = "DELETE FROM news_tag where news_id=?";
-	public static final String SQL_FIND_NEWS_BY_SEARCH_CRITERIA = "Select news_author.AUTHOR_ID,news.NEWS_ID,news.TITLE,news.SHORT_TEXT,news.FULL_TEXT,news.CREATION_DATE,news.MODIFICATION_DATE from news  JOIN news_author ON (news.news_id=news_author.news_id) JOIN news_tag ON(news_author.news_id=news_tag.news_id)";
-	public static final String SQL_FIND_NEWS_BY_SEARCH_CRITERIA_END_QUERY = " GROUP BY news_author.AUTHOR_ID,news.NEWS_ID,news.TITLE,news.SHORT_TEXT,news.FULL_TEXT,news.CREATION_DATE,news.MODIFICATION_DATE";
+	public static final String SQL_FIND_NEWS_BY_SEARCH_CRITERIA = "Select news_author.AUTHOR_ID,news.NEWS_ID,news.TITLE,news.SHORT_TEXT,news.FULL_TEXT,news.CREATION_DATE,news.MODIFICATION_DATE from news  JOIN news_author ON (news.news_id=news_author.news_id) JOIN news_tag ON(news_author.news_id=news_tag.news_id) JOIN COMMENTS ON (NEWS.NEWS_ID=COMMENTS.NEWS_ID)";
+	public static final String SQL_FIND_NEWS_BY_SEARCH_CRITERIA_END_QUERY = " GROUP BY news_author.AUTHOR_ID,news.NEWS_ID,news.TITLE,news.SHORT_TEXT,news.FULL_TEXT,news.CREATION_DATE,news.MODIFICATION_DATE ORDER BY news.MODIFICATION_DATE, COUNT (COMMENTS.COMMENT_ID)";
 	public static final String SQL_FIND_MAX_PK = "Select MAX(news_id) from news";
 	public static final String SQL_COUNT_NEWS = "Select COUNT(news_id) from news";
 	public static final String SQP_PAGINATION_PART_1 = "Select *   from ( select news_by_one_page.*, rownum rnum from (";
 	public static final String SQP_PAGINATION_PART_2 = ") news_by_one_page where rownum <= ?) where rnum >= ? ORDER BY MODIFICATION_DATE DESC";
+	public static final String SQL_FIND_PREVIOUS_NEWS = "SELECT news.* FROM (SELECT NEWS.NEWS_ID, NEWS.TITLE,NEWS.SHORT_TEXT,NEWS.FULL_TEXT, NEWS.CREATION_DATE, NEWS.MODIFICATION_DATE, COUNT (COMMENTS.COMMENT_ID) FROM NEWS JOIN COMMENTS ON (NEWS.NEWS_ID=COMMENTS.NEWS_ID) GROUP BY NEWS.NEWS_ID, NEWS.TITLE, NEWS.CREATION_DATE, NEWS.SHORT_TEXT, NEWS.MODIFICATION_DATE, NEWS.FULL_TEXT ORDER BY NEWS.MODIFICATION_DATE DESC, COUNT (COMMENTS.COMMENT_ID)) news WHERE NEWS.MODIFICATION_DATE >= ? and NEWS.NEWS_ID != ? ORDER BY NEWS.MODIFICATION_DATE";
+	public static final String SQL_FIND_NEXT_NEWS = "SELECT news.* FROM (SELECT NEWS.NEWS_ID, NEWS.TITLE,NEWS.SHORT_TEXT,NEWS.FULL_TEXT, NEWS.CREATION_DATE, NEWS.MODIFICATION_DATE, COUNT (COMMENTS.COMMENT_ID) FROM NEWS JOIN COMMENTS ON (NEWS.NEWS_ID=COMMENTS.NEWS_ID) GROUP BY NEWS.NEWS_ID, NEWS.TITLE, NEWS.CREATION_DATE, NEWS.SHORT_TEXT, NEWS.MODIFICATION_DATE, NEWS.FULL_TEXT ORDER BY NEWS.MODIFICATION_DATE DESC, COUNT (COMMENTS.COMMENT_ID)) news WHERE NEWS.MODIFICATION_DATE <= ? and NEWS.NEWS_ID != ? ORDER BY NEWS.MODIFICATION_DATE DESC";
 	
 
 	/**
@@ -339,6 +341,10 @@ public class NewsDAOImpl implements NewsDAO {
 		}
 		return list;
 	}
+	
+	/**
+	 * @see {@link com.epam.newscommon.dao.NewsDAO#countNews()}
+	 */
 	@Override
 	public int countNews() throws DAOException{
 		int amount = 0;
@@ -353,6 +359,45 @@ public class NewsDAOImpl implements NewsDAO {
 		}
 		return amount;
 		
+	}
+	/**
+	 * @see {@link com.epam.newscommon.dao.NewsDAO#findNextNews(News)}
+	 */
+	@Override
+	public Long findPreviousNews(News currentNews) throws DAOException {
+		Long previousNewsId=0L;
+		try (Connection connection = DataSourceUtils.getConnection(dataSource);
+				PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_PREVIOUS_NEWS)) {
+			preparedStatement.setDate(1, new Date(currentNews.getModificationDate().getTime()));
+			preparedStatement.setLong(2, currentNews.getNewsId());
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()){
+				previousNewsId = resultSet.getLong(DBColumnName.NEWS_ID);
+			}
+			
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		}
+		return previousNewsId;
+	}
+	/**
+	 * @see {@link com.epam.newscommon.dao.NewsDAO#findNextNews(News)}
+	 */
+	@Override
+	public Long findNextNews(News currentNews) throws DAOException {
+		Long nextNewsId=0L;
+		try (Connection connection = DataSourceUtils.getConnection(dataSource);
+				PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_NEXT_NEWS)) {
+			preparedStatement.setDate(1, new Date(currentNews.getModificationDate().getTime()));
+			preparedStatement.setLong(2, currentNews.getNewsId());
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()){
+				nextNewsId = resultSet.getLong(DBColumnName.NEWS_ID);
+			}
+		} catch (SQLException e) {
+			throw new DAOException(e);
+		}
+		return nextNewsId;
 	}
 	/**
 	 * Build SQL query to find news by Search Criteria
@@ -387,7 +432,7 @@ public class NewsDAOImpl implements NewsDAO {
 		query.append(SQL_FIND_NEWS_BY_SEARCH_CRITERIA_END_QUERY);
 		return query;
 	}
-
+	
 	/**
 	 * Get value of primary key for new database's entity
 	 * 
@@ -426,4 +471,6 @@ public class NewsDAOImpl implements NewsDAO {
 	public static BasicDataSource getDataSource() {
 		return dataSource;
 	}
+
+
 }

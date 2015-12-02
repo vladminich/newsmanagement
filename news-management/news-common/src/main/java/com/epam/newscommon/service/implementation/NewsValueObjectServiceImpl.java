@@ -124,7 +124,6 @@ public class NewsValueObjectServiceImpl implements NewsValueObjectService {
 			newsVO.setComments(commentService.showAllNewsComment(news.getNewsId()));
 			newsVOAll.add(newsVO);
 		}
-		sortNewsByAmountComment(newsVOAll);
 		return newsVOAll;
 	}
 
@@ -144,7 +143,6 @@ public class NewsValueObjectServiceImpl implements NewsValueObjectService {
 				newsVO.setComments(commentService.showAllNewsComment(news.getNewsId()));
 				newsVOAll.add(newsVO);
 			}
-			sortNewsByAmountComment(newsVOAll);
 		}
 		return newsVOAll;
 	}
@@ -239,7 +237,6 @@ public class NewsValueObjectServiceImpl implements NewsValueObjectService {
 			newsVO.setComments(commentService.showAllNewsComment(news.getNewsId()));
 			newsVOAll.add(newsVO);
 		}
-		sortNewsByAmountComment(newsVOAll);
 		return newsVOAll;
 	}
 
@@ -274,26 +271,19 @@ public class NewsValueObjectServiceImpl implements NewsValueObjectService {
 		List<Author> authors = authorService.findAllAuthors();
 		return authors;
 	}
-	/**
-	 * Sorted news by comments's amount
-	 * 
-	 * @param list
-	 *            objects of news
-	 */
-	private void sortNewsByAmountComment(List<NewsValueObject> list) {
-		Collections.sort(list, new Comparator<NewsValueObject>() {
-			@Override
-			public int compare(NewsValueObject o1, NewsValueObject o2) {
-				if (o1.getComments().size() > o2.getComments().size()) {
-					return -1;
-				} else if (o1.getComments().size() < o2.getComments().size()) {
-					return 1;
-				}
-				return 0;
-			}
-		});
+	@Override
+	public Long findPreviousNews(News currentNews) throws ServiceException {
+		Long previousNewsId=0L;
+		previousNewsId = newsService.findNextNews(currentNews);
+		return previousNewsId;
 	}
 
+	@Override
+	public Long findNextNews(News currentNews) throws ServiceException {
+		Long nextNewsId=0L;
+		nextNewsId = newsService.findNextNews(currentNews);
+		return nextNewsId;
+	}
 	/**
 	 * Set a newsService field
 	 * 
@@ -333,5 +323,7 @@ public class NewsValueObjectServiceImpl implements NewsValueObjectService {
 	public void setAuthorService(AuthorService authorService) {
 		this.authorService = authorService;
 	}
+
+	
 
 }

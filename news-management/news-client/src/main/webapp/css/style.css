@@ -143,11 +143,10 @@ html, body {
 }
 #next{
 	position: absolute; 
-	padding-left: 87%;
+	margin-left: 87%;
 }
 #previous{
-	position: absolute; 
-	padding-left: 4%;
+	margin-left: 4%;
 	
 }
 .error{

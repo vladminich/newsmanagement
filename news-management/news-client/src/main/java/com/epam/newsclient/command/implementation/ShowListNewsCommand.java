@@ -31,6 +31,7 @@ public class ShowListNewsCommand implements ICommand {
 	private static final String PATH_PAGE_ERROR = "path.page.error";
 	private static final String ATTR_SESSION_AUTHOR = "author";
 	private static final String ATTR_SESSION_TAGS = "tags";
+	private final static String ID_PREVIOUS_PAGE = "idPreviousNewsPage";
 	private static final String PAR_RESET_FILTER = "clear";	
 
 	public String execute(HttpServletRequest request) throws ServiceException {
@@ -38,9 +39,12 @@ public class ShowListNewsCommand implements ICommand {
 		String authorSearch = (String) request.getSession().getAttribute(ATTR_SESSION_AUTHOR);
 		String[] tagsSearch = (String[]) request.getSession().getAttribute(ATTR_SESSION_TAGS);
 		int indexPageNews = Integer.valueOf(request.getParameter(INDEX_PAGE));
-		String resetFilter = null ;
+		String resetFilter = request.getParameter(PAR_RESET_FILTER) ;
 		List<NewsValueObject> news = new ArrayList<>();
-	
+		if(resetFilter!=null && resetFilter.equals("true")){
+			request.getSession().setAttribute(ATTR_SESSION_AUTHOR, null);
+			request.getSession().setAttribute(ATTR_SESSION_TAGS, null);
+		}
 		if ((tagsSearch != null || authorSearch != null) && resetFilter==null) {
 			SearchCriteriaObject sc = CreatorEntity.createSearchCriteria(authorSearch, tagsSearch);
 			news = service.findBySearchCriteria(sc,indexPageNews,COUNT_NEWS_ON_PAGE);
@@ -53,24 +57,16 @@ public class ShowListNewsCommand implements ICommand {
 			request.setAttribute(COUNT_NEWS, service.countNews());
 			request.setAttribute(INDEX_PAGE, indexPageNews);
 		}
-		if(resetFilter!=null && resetFilter.equals("true")){
-			request.getSession().setAttribute(ATTR_SESSION_AUTHOR, null);
-			request.getSession().setAttribute(ATTR_SESSION_TAGS, null);
-			tagsSearch=null;
-			authorSearch=null;
-			request.getSession().setAttribute(ATTR_SESSION_AUTHOR, authorSearch);
-			request.getSession().setAttribute(ATTR_SESSION_TAGS, tagsSearch);
-		}
+		
 		List<Author> authors = service.findAllAuthors();
 		List<Tag> tags = service.findAllTags();
 		if (authors.isEmpty() || authors == null || tags.isEmpty() || tags == null) {
 			return ConfigurationManager.getProperty(PATH_PAGE_ERROR);
 		}
+		request.getSession().setAttribute(ID_PREVIOUS_PAGE, indexPageNews);
 		request.setAttribute(AUTHORS, authors);
 		request.setAttribute(TAGS, tags);
 		request.setAttribute(NEWS_LIST, news);
-		
-		request.getSession().setAttribute("url", ConfigurationManager.getProperty(PATH_PAGE_SUCCESS));
 		return ConfigurationManager.getProperty(PATH_PAGE_SUCCESS);
 	}
 }
